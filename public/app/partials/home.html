@@ -1,0 +1,16 @@
+
+<!-- module api :: https://github.com/jonashartmann/webcam-directive -->
+<!-- simple webkit stream example :: http://jsfiddle.net/URyLt/208/ -->
+<!-- stackoverflow question about uploading to server :: http://stackoverflow.com/questions/13431251/html5-solution-to-upload-a-webcam-camera-video-stream-to-server -->
+<!-- sending binary data to server :: http://dathor.blogspot.in/2011/04/html5-websockets-sending-binary-data.html -->
+<!-- stream a webcam :: http://francisshanahan.com/index.php/2011/stream-a-webcam-using-javascript-nodejs-android-opera-mobile-web-sockets-and-html5/ -->
+<!-- mediastream recording api (not very readable) :: http://www.w3.org/TR/mediastream-recording/ -->
+<!-- MediaStreamRecorder implementation :: https://github.com/streamproc/MediaStreamRecorder -->
+<!-- Convert dataURI to blog :: https://gist.github.com/davoclavo/4424731 -->
+
+<webcam channel="channel" on-stream="onStream(stream)"></webcam>
+<button ng-click="captureFrame()">Capture Frame</button>
+<button ng-click="startCaptureFrames()">Start Capturing Frames</button>
+<button ng-click="stopCaptureFrames()">Stop Capturing Frames</button>
+<button ng-click="startRecording()">Start recording</button>
+<button ng-click="stopRecording()">Stop recording</button>

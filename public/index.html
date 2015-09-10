@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html ng-app="MainApplicationModule">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="First Webcam App">
+    <meta name="author" content="paulhemmings">
+    <title>Razor - Webcam app</title>
+
+    <!-- libs -->
+    <link href="lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+
+    <!-- App -->
+    <link href="styles/global.css" rel="stylesheet" />
+
+</head>
+<body>
+
+    <!-- dynamic content -->
+    <div ui-view="content"></div>
+
+    <!-- App libs -->
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="lib/angular-animate/angular-animate.min.js"></script>
+    <script src="lib/angular-cookies/angular-cookies.min.js"></script>
+
+
+    <!-- Other scripts -->
+    <script src="scripts/webcam.js"></script>
+    <script src="scripts/MediaStreamRecorder.js"></script>
+
+    <!--
+    <script src="lib/webcam-directive/dist/webcam.min.js"></script>
+    -->
+    <!-- application -->
+    <script src="app/app.js"></script>
+    <script src="app/controllers/home-controller.js"></script>
+    <script src="app/services/upload-data-service.js"></script>
+    <script src="app/directives/auto-refresh.js"></script>
+
+    <!-- bootstrap responsive stuff -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>
