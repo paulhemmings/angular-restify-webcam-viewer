@@ -1,8 +1,15 @@
+<!--
 <img auto-refresh="1000" />
+-->
 <div>
     <input ng-model="dataToSend">
     <button ng-click="emitBasic()">Send</button>
     <button ng-click="emitACK()">Send (ACK)</button>
     <div>Server Response: {{ serverResponse }}</div>
     <div>Server Response (ACK): {{ serverResponseACK }}</div>
+
+    <img src="{{imageSrc}}" />
+    <button ng-click="startWatching()">Watch</button>
+    <button ng-click="stopWatching()">Stop</button>
+
 </div>

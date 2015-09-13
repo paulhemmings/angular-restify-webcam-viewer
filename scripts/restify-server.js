@@ -68,6 +68,20 @@ io.sockets.on('connection', function (socket) {
         console.log('emite echo');
         socket.emit('echo', data);
     });
+    socket.on('echo-ack', function (data, callback) {
+        callback(data);
+    });
+    socket.on('join', function(room) {
+        socket.join(room);
+    });
+    socket.on('request-frame', function(room) {
+      console.log('emite request-frame');
+      socket.to(room).emit('request-frame');      
+    });
+    socket.on('frame-available', function(room) {
+        console.log('emite frame-available');
+        socket.to(room).emit('frame-available');
+    });
 });
 
 // start the server listening

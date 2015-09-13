@@ -2,12 +2,10 @@
 
 angular
     .module('MainApplicationModule')
-    .controller('ViewerController', ['$scope', '$socket',
-        function($scope, $socket) {
+    .controller('ViewerController', ['$scope', '$interval', '$socket',
+        function($scope, $interval, $socket) {
 
-          $socket.on('echo', function (data) {
-              $scope.serverResponse = data;
-          });
+          $scope.roomName = 'pauls-room';
 
           $scope.emitBasic = function emitBasic() {
               console.log('echo event emited');
@@ -23,6 +21,34 @@ angular
               });
               $scope.dataToSend = '';
           };
+
+          $scope.requestFrame = function() {
+              $socket.emit('request-frame', $scope.roomName);
+          };
+
+          $scope.startWatching = function() {
+              $socket.on('frame-available', function() {
+                  console.log('started watching');
+                  $scope.imageSrc = '/video/frame?random=' + new Date();
+              });
+              $scope.interval = $interval($scope.requestFrame, 1000);
+          };
+
+          $scope.stopWatching = function() {
+              $socket.off('frame-available', function() {
+                  console.log('stopped watching');
+              });
+              $interval.cancel($scope.interval);
+          }
+
+          function initializeSocket() {
+              $socket.emit('join', $scope.roomName);
+              $socket.on('echo', function (data) {
+                  $scope.serverResponse = data;
+              });
+          }
+
+          initializeSocket();
 
         }
     ]);

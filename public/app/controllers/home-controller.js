@@ -2,8 +2,10 @@
 
 angular
     .module('MainApplicationModule')
-    .controller('HomeController', ['$scope', '$interval', 'uploadDataService',
-        function($scope, $interval, uploadDataService) {
+    .controller('HomeController', ['$scope', '$interval', '$socket', 'uploadDataService',
+        function($scope, $interval, $socket, uploadDataService) {
+
+          $scope.roomName = 'pauls-room';
 
           $scope.channel = {
               // the fields below are all optional
@@ -32,16 +34,28 @@ angular
           $scope.captureFrame = function() {
               console.log('capture frame');
               $scope.channel.captureFrame(function(frame) {
-                  console.log('received/sending frame');
-                  uploadDataService.uploadFrame(frame);
+                  console.log('uploading frame');
+                  uploadDataService.uploadFrame(frame).then(function() {
+                      console.log('emit frame available socket event');
+                      $socket.emit('frame-available', $scope.roomName);
+                  });
               });
           }
 
           $scope.startCaptureFrames = function() {
               $scope.interval = $interval($scope.captureFrame, 1000);
           }
+
           $scope.stopCaptureFrames = function() {
               $scope.interval.cancel();
           }
+
+          function initializeSocket() {
+              $socket.emit('join', $scope.roomName);
+              $socket.on('request-frame', $scope.captureFrame);
+          }
+
+          initializeSocket();
+
         }
     ]);
