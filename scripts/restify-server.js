@@ -2,7 +2,8 @@
 
 var restify = require('restify'),
     CookieParser = require('restify-cookies'),
-    fs = require('fs');
+    fs = require('fs'),
+    socketio = require('socket.io');
 
 // instantiate the server
 // http://mcavage.me/node-restify/#Bundled-Plugins
@@ -10,6 +11,12 @@ var restify = require('restify'),
 var server = restify.createServer();
 server.use(restify.bodyParser({ mapParams: false }));
 server.use(CookieParser.parse);
+
+// instantiate the socket, get it listening to the server
+// http://mcavage.me/node-restify/#socketio
+// https://github.com/restify/node-restify/issues/717
+
+var io = socketio.listen(server.server);
 
 // serve static content
 // http://mcavage.me/node-restify/#Server-API
@@ -47,6 +54,20 @@ fs.readdirSync(modelsPath).forEach(function(file) {
 	console.log('load resource ' + file);
   var resource = require(modelsPath + '/' + file);
   resource.initialize(server, services);
+});
+
+// bootstrap socket events
+
+io.sockets.on('connection', function (socket) {
+    console.log('a user connected');
+    socket.emit('news', { hello: 'world' });
+    socket.on('my other event', function (data) {
+            console.log(data);
+    });
+    socket.on('echo', function (data) {
+        console.log('emite echo');
+        socket.emit('echo', data);
+    });
 });
 
 // start the server listening

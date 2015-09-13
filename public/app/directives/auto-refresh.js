@@ -4,13 +4,22 @@ angular
         return {
             restrict: 'A',
             link: function(scope, element, attrs) {
-                var imageElement;
-                $interval(function() {
-                    element.html("");
-                    imageElement = document.createElement('img');
-                    imageElement.setAttribute('src', '/video/frame?random=' + new Date())
-                    element.append(imageElement);
-                }, 1000);
+                var interval;
+
+                function setRefresh() {
+                  interval = $interval(function() {
+                      element[0].setAttribute('src', '/video/frame?random=' + new Date())
+                  }, attrs.autoRefresh);
+
+                };
+
+                attrs.$observe("autoRefresh", function(target,o) {
+                    if (interval) {
+                        inteval.cancel();
+                    }
+                    setRefresh();
+                });
+
             }
         };
     }]);

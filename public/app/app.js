@@ -20,7 +20,8 @@ angular.module('MainApplicationModule', ['ui.router', 'ngAnimate', 'ngCookies','
 
 angular
     .module('MainApplicationModule')
-    .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    .config(['$stateProvider', '$urlRouterProvider', '$socketProvider', function($stateProvider, $urlRouterProvider, $socketProvider) {
+      $socketProvider.setConnectionUrl('http://localhost:8080');
       $urlRouterProvider.otherwise('/home');
       $stateProvider
           .state('home', {
@@ -37,7 +38,7 @@ angular
               views: {
                   'content': {
                       templateUrl: '/app/partials/viewer.html',
-                      controller: 'HomeController'
+                      controller: 'ViewerController'
                   }
               }
           });
