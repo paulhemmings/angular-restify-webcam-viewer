@@ -55,7 +55,7 @@ angular
                 function drawDataUrl(dataUrl) {
                     var image = new Image();
                     image.src = dataUrl;
-                    canvas.getContext('2d').drawImage(image, 0, 0, image.width, image.height);
+                    canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
                 }
 
                 function captureFrame(video) {

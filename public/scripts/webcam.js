@@ -136,7 +136,6 @@ angular.module('webcam', [])
               isStreaming = true;
 
               $scope.config.video = videoElem;
-              $scope.config.captureFrame = captureFrame;
 
               _removeDOMElement(placeholder);
 
