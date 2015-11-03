@@ -63,6 +63,9 @@
         var socket = io(ioUrl, ioConfig);
 
         return {
+            id : function id() {
+                return socket.id;
+            },
             on : function on(event, callback){
                 socket.on(event, function(){
                     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments

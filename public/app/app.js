@@ -8,7 +8,7 @@
  *  var app = angular.module('app');
  */
 
-angular.module('MainApplicationModule', ['ui.router', 'ngAnimate', 'ngCookies','webcam' ]);
+angular.module('MainApplicationModule', ['ui.router', 'ngAnimate', 'ngCookies', 'webcam', 'ngLodash' ]);
 
 /*
  * Add SPA Routing using route provider
@@ -20,26 +20,27 @@ angular.module('MainApplicationModule', ['ui.router', 'ngAnimate', 'ngCookies','
 
 angular
     .module('MainApplicationModule')
-    .config(['$stateProvider', '$urlRouterProvider', '$socketProvider', function($stateProvider, $urlRouterProvider, $socketProvider) {
-      $socketProvider.setConnectionUrl('http://localhost:8080');
-      $urlRouterProvider.otherwise('/home');
-      $stateProvider
-          .state('home', {
-              url:'/home',
-              views: {
-                  'content': {
-                      templateUrl: '/app/partials/home.html',
-                      controller: 'HomeController'
+    .config(['$stateProvider', '$urlRouterProvider', '$socketProvider',
+        function($stateProvider, $urlRouterProvider, $socketProvider) {
+          $socketProvider.setConnectionUrl(window.location.protocol + '//' + window.location.host);
+          $urlRouterProvider.otherwise('/viewer');
+          $stateProvider
+              .state('viewer', {
+                  url:'/viewer',
+                  views: {
+                      'content': {
+                          templateUrl: '/app/partials/viewer.html',
+                          controller: 'ViewerController'
+                      }
                   }
-              }
-          })
-          .state('viewer', {
-              url:'/viewer',
-              views: {
-                  'content': {
-                      templateUrl: '/app/partials/viewer.html',
-                      controller: 'ViewerController'
-                  }
-              }
-          });
-    }]);
+              });
+    }])
+    .run(function($rootScope, $socket, $timeout) {
+          function checkin() {
+              $socket.emit('stay-alive', 'pauls-room', function(response) {
+                  console.log(response);
+                  $timeout(checkin, 100000);
+              });
+          }
+          $timeout(checkin, 100000);
+      });

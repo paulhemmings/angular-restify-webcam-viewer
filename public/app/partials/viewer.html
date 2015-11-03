@@ -1,15 +1,77 @@
-<!--
-<img auto-refresh="1000" />
--->
-<div>
-    <input ng-model="dataToSend">
-    <button ng-click="emitBasic()">Send</button>
-    <button ng-click="emitACK()">Send (ACK)</button>
-    <div>Server Response: {{ serverResponse }}</div>
-    <div>Server Response (ACK): {{ serverResponseACK }}</div>
+<style>
+  .row.camera {
+    min-height: 400px;
+  }
+  .camera-list {
+    list-style:none;
+    vertical-align:top;
+    display:inline-block;
+    padding:0;
+  }
+  .camera-block {
+    display: inline-block;
+    padding: 0.5em;
+    background-color: #def;
+    margin: 0.4em;
+  }
+  .camera-block h4 {
+    margin: 0;
+  }
+  .camera-block .videoCanvas, .camera-block .selfCanvas {
+      height:262px;
+      width:350px;
+  }
+  .camera-controls {
+    vertical-align: top;
+    display: inline-block;
+    width:100%;
+    text-align: right;
+  }
+  .selfVideoCanvas {
+    display:none;
+  }
+  .row.status {
+    border-top: 1px solid #eee;
+    text-align: right;
+  }
+</style>
 
-    <img src="{{imageSrc}}" />
-    <button ng-click="startWatching()">Watch</button>
-    <button ng-click="stopWatching()">Stop</button>
+<div class="row camera">
+    <ul class="camera-list">
+        <li ng-show="showSelf" class="camera-block" >
+            <h4>self</h4>
+            <div class="selfCanvas">
+                <webcam channel="channel"></webcam>
+            </div>
+            <div class="camera-controls">
+                <button ng-click="toggleSelfView()">Toggle View</button>
+                <button ng-click="reloadPage()">Reload</button>
+            </div>
+        </li>
+        <li class="camera-block" ng-repeat="occupant in occupants track by $index">
+            <h4>camera {{$index+1}}</h4>
+            <video-canvas canvas="occupant.canvas" on-loaded="onLoaded(occupant.canvas)"></video-canvas>
+            <div class="camera-controls" >
+                <input type='text' ng-model='occupant.intervalDuration' value="{{occupant.intervalDuration}}" />
+                <button ng-show="occupant.viewing == false" ng-click="startWatching(occupant)">Watch</button>
+                <button ng-show="occupant.viewing == true" ng-click="stopWatching(occupant)">Stop</button>
+                <button ng-show="occupant.viewing == false" ng-click="requestFrame(occupant)">Snap</button>
+            </div>
+        </li>
+    </ul>
+</div>
 
+<div class="selfVideoCanvas">
+    <video-canvas canvas="canvas"></video-canvas>
+</div>
+
+<div class="row status">
+    <div style="vertical-align: top;display: inline-block;" >
+        <button ng-click="ping()">Ping</button>
+    </div>
+    <div style="vertical-align: top;display: inline-block;" >
+        <ul style="display: inline-block;list-style: none;">
+            <li ng-repeat="s in status track by $index">{{s}}</li>
+        </ul>
+    </div>
 </div>

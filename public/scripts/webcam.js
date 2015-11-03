@@ -39,40 +39,10 @@ angular.module('webcam', [])
       },
       link: function postLink($scope, element) {
         var videoElem = null,
-            canvasElem = null,
             videoStream = null,
             placeholder = null;
 
         $scope.config = $scope.config || {};
-
-        var dataURItoBlob = function(dataURI) {
-            // convert base64 to raw binary data held in a string
-            var byteString = atob(dataURI.split(',')[1]);
-
-            // separate out the mime component
-            var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-            // write the bytes of the string to an ArrayBuffer
-            var arrayBuffer = new ArrayBuffer(byteString.length);
-            var _ia = new Uint8Array(arrayBuffer);
-            for (var i = 0; i < byteString.length; i++) {
-                _ia[i] = byteString.charCodeAt(i);
-            }
-
-            var dataView = new DataView(arrayBuffer);
-            var blob = new Blob([dataView], { type: mimeString });
-            return blob;
-        }
-
-        var captureFrame = function(callback) {
-          canvasElem.width = videoElem.clientWidth;
-          canvasElem.height = videoElem.clientHeight;
-
-          var context = canvasElem.getContext('2d');
-          context.drawImage(videoElem, 0, 0, videoElem.clientWidth, videoElem.clientHeight);
-
-          callback(dataURItoBlob(canvasElem.toDataURL()));
-        }
 
         var _removeDOMElement = function _removeDOMElement(DOMel) {
           if (DOMel) {
@@ -128,12 +98,9 @@ angular.module('webcam', [])
 
         var startWebcam = function startWebcam() {
           videoElem = document.createElement('video');
-          canvasElem = document.createElement('canvas');
           videoElem.setAttribute('class', 'webcam-live');
           videoElem.setAttribute('autoplay', '');
-          angular.element(canvasElem).css('display', 'none');
           element.append(videoElem);
-          element.append(canvasElem);
 
           if ($scope.placeholder) {
             placeholder = document.createElement('img');
@@ -184,7 +151,6 @@ angular.module('webcam', [])
         var stopWebcam = function stopWebcam() {
           onDestroy();
           videoElem.remove();
-          canvasElem.remove();
         };
 
         $scope.$on('$destroy', onDestroy);
